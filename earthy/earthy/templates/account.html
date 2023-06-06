@@ -1,0 +1,109 @@
+{% extends "base.html" %} {% block
+content %}
+<div class="content-section background">
+  <div class="row">
+    <div class="media col-md-9">
+      <img class="rounded-circle account-img" src="{{ image_file }}" />
+      <div class="media-body">
+        <h2 class="account-heading">{{ current_user.username }}</h2>
+        <p class="text-primart">Plastic Score: {{ score }}</p>
+        <p class="text-secondary">{{ current_user.email }}</p>
+        <p class="text-secondary">
+          {{ current_user.members }} members in the household
+        </p>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <a
+        type="button"
+        class="btn btn-secondary"
+        href="{{url_for('users.edit_account')}}"
+      >
+        Edit profile
+      </a>
+    </div>
+  </div>
+  <br/>
+  <h2 class="mb-3">My posts</h2>
+  {% for post in posts.items %}
+  <article class="media content-section background-2">
+    <img
+      class="rounded-circle article-img"
+      src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}"
+    />
+    <div class="media-body">
+      <div class="article-metadata">
+        <a
+          class="mr-2"
+          href="{{ url_for('users.account', username=post.author.username) }}"
+          >{{ post.author.username }}</a
+        >
+        <small class="text-muted"
+          >{{ post.date_created.strftime('%Y-%m-%d') }}</small
+        >
+      </div>
+      <h2>
+        <a
+          class="article-title"
+          href="{{ url_for('posts.post', post_id=post.id) }}"
+          >{{ post.title }}</a
+        >
+      </h2>
+      <p class="article-content">{{ post.content }}</p>
+      <div class="collapse" id="comments-{{post.id}}">
+        <div class="card">
+          <div class="card-body" id="comments-expanded-{{post.id}}">
+            {% for comment in post.comments %}
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <a href="/posts/{{comment.user.username}}"
+                  >{{comment.user.username}}</a
+                >: {{comment.text}}
+              </div>
+              <small class="text-muted"> {{comment.date_created}}</small>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <p class="card-text">
+        {% if post.comments|length > 0 %}
+        <a data-toggle="collapse" href="#comments-{{post.id}}" role="button">
+          <small>View {{post.comments|length}} Comments</small>
+        </a>
+        {% else %}
+        <small class="text-muted">No Comments</small>
+        {% endif %}
+      </p>
+      <form
+        class="input-group mb-3"
+        method="POST"
+        action="/create-comment/{{post.id}}"
+      >
+        <input
+          type="text"
+          id="text"
+          name="text"
+          class="form-control"
+          placeholder="Comment something!"
+        />
+        <button type="submit" class="btn btn-primary">Comment</button>
+      </form>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1,
+right_current=2) %} {% if page_num %} {% if posts.page == page_num %}
+<a
+  class="btn btn-info mb-4"
+  href="{{ url_for('users.account', username=user.username, page=page_num) }}"
+  >{{ page_num }}</a
+>
+{% else %}
+<a
+  class="btn btn-outline-info mb-4"
+  href="{{ url_for('users.account', username=user.username, page=page_num) }}"
+  >{{ page_num }}</a
+>
+{% endif %} {% else %} ... {% endif %} {% endfor %} {% endblock content %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block content%}
+<div class="content-section">
+  <h4>Track your plastic!</h4>
+  <p>
+    Know how much plastic you use, follow the tips to reduce it, and save earth.
+  </p>
+  <hr>
+  <p><b>Remember! You're tracking the plastic use of your whole household.</b></p>
+  <form method="POST" action="">
+    {{ form.hidden_tag()}} {% for field in form %} {% if field.name!='submit'%}
+    <div class="form-group">
+      <label for="">{{field.label}}</label>
+      {{field}} /
+      <select name="frequency {{field.name}}">
+        <option value="day">Day</option>
+        <option value="week" selected>Week</option>
+        <option value="month">Month</option>
+        <option value="year">Year</option>
+      </select>
+    </div>
+    {%endif%} {%endfor%}
+    <div class="form-group">
+      {{ form.submit(class="btn btn-outline-info") }}
+    </div>
+  </form>
+
+  <hr />
+  <div id="result">
+    <div class="row">
+      <div class="col-md-9">
+        Total Plastic Weight : <span class="total">{{ result }}</span>
+        <span class="unit">kg/year</span>
+      </div>
+      <div class="col-md-3">
+        <a
+          type="button"
+          class="btn btn-secondary"
+          href="{{url_for('tracker.getInsight')}}"
+        >
+          Get Insight!
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%endblock%}

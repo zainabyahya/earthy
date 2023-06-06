@@ -1,0 +1,59 @@
+{% extends "base.html" %} {% block content%}
+<div class="content-section">
+  <div class="media-section">
+    {%if nationally%} {%if locally%}
+    <h4>Congratualations! You smashed it!</h4>
+    <p>
+      The plastic score of your household of {{members}} members, which is
+      {{score}} kg/year, is below both the local average for Lebanon,
+      <b>28.4 kg/year/person</b>, and the international average,
+      <b>50.6 kg/year/person</b>.
+    </p>
+    <p>
+      Keep the good work. And remember, the less plastic, the better.
+    </p>
+    {%else%}
+    <h4>Horay! You smashed one number, one more to go!</h4>
+    <p>
+      The plastic score of your household of {{members}} members, which is
+      {{score}} kg/year, is below both the international average,
+      <b>50.6 kg/year/person</b>. But sadly, it's still above the local average
+      for Lebanon, <b>28.4 kg/year/person</b>.
+    </p>
+    <p>
+      keep the good work and aim for the lowest. Look at our website to check
+        how you can lower your plastic use!
+    </p>
+    {%endif%} {%else%}
+    <h4>Opps!</h4>
+    <p>
+      The plastic score of your household of {{members}} members, which is
+      {{score}} kg/year, is above both the local average for Lebanon,
+      <b>28.4 kg/year/person</b>, and the international average,
+      <b>50.6 kg/year/person</b>.
+    </p>
+    <p>
+      Look at our website to check how you can lower your plastic use!
+    </p>
+    {%endif%}
+  </div>
+  <div class="container" align="left">
+    <embed
+      type="image/svg+xml"
+      src="{{graph_data|safe}}"
+      style="max-width: 1000px"
+    />
+  </div> 
+  <hr>
+{% if items|count!=0 %}
+<p><b>
+  The heaviest 3 items of your total consumption are: {{maxItems}}
+</b></p>
+<h4>Tips to lower your plastic use:</h4>
+<p>{{suggestions}}</p>
+{%endif%}
+</div>
+
+
+
+{% endblock%}
